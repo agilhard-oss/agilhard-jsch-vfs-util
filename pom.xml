@@ -23,6 +23,13 @@
   <name>Agilhard Util - JSch and VFS Support</name>
   <description>Agilhard Util - JavaSecure Channel (JSch) and Virtual FileSystem (VFS) Support</description>
 
+  <licenses>
+    <license>
+      <name>LGPL</name>
+      <url>http://www.gnu.org/licenses/lgpl.html</url>
+    </license>
+  </licenses>
+
   <properties>
     <rootBasedir>${project.basedir}/../..</rootBasedir>
   </properties>
