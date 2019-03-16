@@ -48,7 +48,7 @@ public final class VFSTools {
     private FileSystemOptions opts = new FileSystemOptions();
 
     /** The a lock. */
-    private final ReadWriteLock aLock = new ReentrantReadWriteLock(true);
+    private static ReadWriteLock aLock = new ReentrantReadWriteLock(true);
 
     private static VFSTools theOne;
 
@@ -58,7 +58,15 @@ public final class VFSTools {
 
     public static synchronized VFSTools getInstance() {
         if (theOne == null) {
-            theOne = new VFSTools();
+            aLock.writeLock().lock();
+            try {
+            	theOne = new VFSTools();
+            }
+            finally
+            {
+                aLock.writeLock().unlock();
+            }
+
         }
         return theOne;
     }
@@ -101,6 +109,7 @@ public final class VFSTools {
      */
     public FileSystemManager getFileSystemManager() throws FileSystemException {
         this.aLock.readLock().lock();
+
         if (this.fileSystemManager == null) {
             this.fileSystemManager = AccessController.doPrivileged(new PrivilegedAction<FileSystemManager>() {
 
@@ -111,6 +120,7 @@ public final class VFSTools {
                     try {
                         fm = new StandardFileSystemManager();
                         fm.setClassLoader(fm.getClass().getClassLoader());
+                        fm.addProvider("sftp", new net.agilhard.vfs2.provider.sftp.SftpFileProvider());
 
                         fm.setCacheStrategy(CacheStrategy.MANUAL);
                         fm.init();
@@ -123,7 +133,7 @@ public final class VFSTools {
                     if (fm.hasProvider("smb")) {
                         log.info("VFS Provider for smb found");
                     } else {
-                        log.error("VFS Provider for smb missing");
+                        log.warn("VFS Provider for smb missing");
                     }
                     try {
                         final File f = new java.io.File(".").getCanonicalFile();
