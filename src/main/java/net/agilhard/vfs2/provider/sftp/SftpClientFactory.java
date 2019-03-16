@@ -34,6 +34,8 @@ import net.agilhard.jsch.ProxySOCKS5;
 import net.agilhard.jsch.Session;
 import net.agilhard.jsch.UserInfo;
 
+import net.agilhard.jschutil.JSchUtil;
+
 /**
  * Create a JSch Session instance.
  */
@@ -63,7 +65,9 @@ public final class SftpClientFactory {
      */
     public static Session createConnection(final String hostname, final int port, final char[] username,
             final char[] password, final FileSystemOptions fileSystemOptions) throws FileSystemException {
-        final JSch jsch = new JSch();
+
+        //final JSch jsch = new JSch();
+	final JSch jsch = JSchUtil.getJSch();
 
         File sshDir = null;
 
@@ -81,7 +85,9 @@ public final class SftpClientFactory {
             jsch.setIdentityRepository(repositoryFactory.create(jsch));
         }
 
-        addIdentities(jsch, sshDir, identities);
+	if ( repositoryFactory == null || identities != null ) {
+	    addIdentities(jsch, sshDir, identities);
+	}
 
         Session session;
         try {

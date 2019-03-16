@@ -88,7 +88,7 @@ public final class JSchUtil {
     /**
      * Gets the Jsch.
      *
-     * @return the j sch
+     * @return the jsch
      */
     public static synchronized JSch getJSch() {
         if (jsch == null) {
@@ -117,7 +117,7 @@ public final class JSchUtil {
     /**
      * Gets the known hosts.
      *
-     * @return the known hosts
+     * @return the known hostsuseAgent
      */
     public static synchronized String getKnownHosts() {
         final Logger log = LoggerFactory.getLogger(JSchUtil.class);
